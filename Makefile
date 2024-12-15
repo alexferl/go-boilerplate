@@ -55,4 +55,4 @@ fmt: check-gofumpt
 	gofumpt -l -w .
 
 pre-commit: check-pre-commit
-	pre-commit
+	pre-commit run --all-files
