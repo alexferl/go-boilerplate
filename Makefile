@@ -1,4 +1,4 @@
-.PHONY: dev run test cover cover-html fmt pre-commit
+.PHONY: dev run test cover cover-html fmt tidy pre-commit
 
 .DEFAULT: help
 help:
@@ -12,10 +12,10 @@ help:
 	@echo "	run go test with -cover"
 	@echo "make cover-html"
 	@echo "	run go test with -cover and show HTML"
-	@echo "make tidy"
-	@echo "	run go mod tidy"
 	@echo "make fmt"
 	@echo "	run gofumpt"
+	@echo "make tidy"
+	@echo "	run go mod tidy"
 	@echo "make pre-commit"
 	@echo "	run pre-commit hooks"
 
@@ -48,11 +48,11 @@ cover-html:
 	go test -v -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 
-tidy:
-	go mod tidy
-
 fmt: check-gofumpt
 	gofumpt -l -w .
+
+tidy:
+	go mod tidy
 
 pre-commit: check-pre-commit
 	pre-commit run --all-files

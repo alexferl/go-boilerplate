@@ -6,7 +6,7 @@ Includes:
 - [pre-commit](https://pre-commit.com)
 
 ## Requirements
-- Go 1.22+
+- Go 1.23+
 
 ## Using
 ```shell
