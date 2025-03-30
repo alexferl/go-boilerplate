@@ -1,3 +1,3 @@
 module go-boilerplate
 
-go 1.24
+go 1.23.0
