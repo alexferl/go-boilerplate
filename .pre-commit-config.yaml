@@ -13,6 +13,13 @@ repos:
       - id: mixed-line-ending
         args: ["--fix=lf"]
       - id: pretty-format-json
-        args: ["--autofix", "--no-sort-keys"]
-        files: "$.json"
+        args: ["--autofix", "--indent=2", "--no-sort-keys"]
+        files: \.json$
       - id: trailing-whitespace
+  - repo: https://github.com/bhundven/golang-pre-commit.git
+    rev: v1.1.3
+    hooks:
+      - id: go-fumpt
+      - id: golangci-lint
+      - id: go-unit-tests
+      - id: go-mod-tidy

@@ -3,6 +3,7 @@ A minimalistic Go boilerplate.
 
 Includes:
 - [gofumpt](https://pkg.go.dev/mvdan.cc/gofumpt)
+- [golangci-lint](https://golangci-lint.run)
 - [pre-commit](https://pre-commit.com)
 
 ## Requirements
