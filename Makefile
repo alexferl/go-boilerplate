@@ -25,6 +25,11 @@ help:
 	@echo "make update-dependencies"
 	@echo "	update dependencies"
 
+GOTESTSUM := go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1
+TESTFLAGS := -shuffle=on
+COVERFLAGS := -covermode=atomic
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.0.2
+
 check-pre-commit:
 ifeq (, $(shell which pre-commit))
 	$(error "pre-commit not in $(PATH), pre-commit (https://pre-commit.com) is required")
@@ -35,21 +40,20 @@ dev: check-pre-commit
 
 audit:
 	go mod verify
-	go vet ./...
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
 coverage:
-	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -covermode=atomic
+	$(GOTESTSUM) $(TESTFLAGS) $(COVERFLAGS)
 
 coverage-html:
-	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=coverage.out -covermode=atomic
+	$(GOTESTSUM) $(TESTFLAGS) $(COVERFLAGS) -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 
 format:
-	go run mvdan.cc/gofumpt@latest -w -l .
+	$(GOLANGCI_LINT) fmt
 
 lint:
-	go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.0.2 run
+	$(GOLANGCI_LINT) run
 
 pre-commit: check-pre-commit
 	pre-commit run --all-files
@@ -58,7 +62,7 @@ run:
 	go build -o app-bin ./cmd/app && ./app-bin
 
 test:
-	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -shuffle=on
+	$(GOTESTSUM) $(TESTFLAGS)
 
 tidy:
 	go mod tidy -v
