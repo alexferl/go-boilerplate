@@ -50,24 +50,24 @@ build:
 	go build -ldflags="-X main.Version=$(VERSION)" -o app-bin ./cmd/app
 
 test:
-	go test -v ./...
+	go test -race -v ./...
 
 cover:
-	go test -cover -v ./...
+	go test -race -cover -v ./...
 
 cover-html:
-	go test -v -coverprofile=coverage.out ./...
+	go test -race -coverprofile=coverage.out -covermode=atomic ./...
 	go tool cover -html=coverage.out
 
 lint: check-golangci-lint
 	gofumpt -l -w .
 	golangci-lint run ./...
 
-update-deps: tidy
-	go get -u ./...
-
 tidy:
 	go mod tidy
+
+update-deps: tidy
+	go get -u ./...
 
 pre-commit: check-pre-commit
 	pre-commit run --all-files
