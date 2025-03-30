@@ -4,37 +4,32 @@ on:
   push:
     branches:
       - master
+      - main
   pull_request:
 
 jobs:
-  test:
+  unit:
     strategy:
       matrix:
-        go: [oldstable, stable]
-        os: [ubuntu-latest, macos-latest]
-    name: lint
+        go-version: [ oldstable, stable ]
+        os: [  macos-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Fetch Repository
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go }}
+          go-version: ${{ matrix.go-version }}
 
-      - name: Install golangci-lint
-        uses: golangci/golangci-lint-action@v7
+      - name: Test
+        run: go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=coverage.txt -covermode=atomic -shuffle=on
+
+      - name: Upload coverage reports to Codecov
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.go-version == 'stable' }}
+        uses: codecov/codecov-action@v5.4.0
         with:
-          version: v2.0
-
-      - uses: actions/setup-python@v5
-
-      - name: Install pre-commit
-        run: pip install pre-commit
-
-      - name: Clear pre-commit cache
-        run: rm -rf ~/.cache/pre-commit
-
-      - name: Run pre-commit
-        run: pre-commit run --all-files
-
-      - name: Test with Go
-        run: go test -race ./...
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.txt
+          flags: unittests

@@ -4,10 +4,12 @@ A minimalistic Go boilerplate.
 Includes:
 - [gofumpt](https://pkg.go.dev/mvdan.cc/gofumpt)
 - [golangci-lint](https://golangci-lint.run)
-- [pre-commit](https://pre-commit.com)
+- [gotest](https://pkg.go.dev/gotest.tools/gotestsum)
+- [govuln](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)
 
 ## Requirements
 - Go 1.23+
+- [pre-commit](https://pre-commit.com)
 
 ## Using
 ```shell

@@ -1,34 +1,29 @@
-.PHONY: dev run build test cover cover-html lint tidy update-deps pre-commit
+.PHONY: dev audit coverage coverage-html format lint pre-commit run test tidy update-dependencies
 
 .DEFAULT: help
 help:
 	@echo "make dev"
 	@echo "	setup development environment"
-	@echo "make run"
-	@echo "	run app"
-	@echo "make build"
-	@echo "	build app"
-	@echo "make test"
-	@echo "	run go test"
-	@echo "make cover"
-	@echo "	run go test with -cover"
-	@echo "make cover-html"
-	@echo "	run go test with -cover and show HTML"
+	@echo "make audit"
+	@echo "	conduct quality checks"
+	@echo "make coverage"
+	@echo "	generate coverage report"
+	@echo "make coverage-html"
+	@echo "	generate coverage HTML report"
+	@echo "make format"
+	@echo "	fix code format issues"
 	@echo "make lint"
-	@echo "	lint code"
-	@echo "make tidy"
-	@echo "	run go mod tidy"
-	@echo "make update-deps"
-	@echo "	update dependencies"
+	@echo "	run lint checks"
 	@echo "make pre-commit"
 	@echo "	run pre-commit hooks"
-
-VERSION := $(shell git describe --tags --always --dirty)
-
-check-golangci-lint:
-ifeq (, $(shell which golangci-lint))
-	$(error "golangci-lint not in $(PATH), golangci-lint (https://golangci-lint.run) is required")
-endif
+	@echo "make run"
+	@echo "	run application"
+	@echo "make test"
+	@echo "	execute all tests"
+	@echo "make tidy"
+	@echo "	clean and tidy dependencies"
+	@echo "make update-dependencies"
+	@echo "	update dependencies"
 
 check-pre-commit:
 ifeq (, $(shell which pre-commit))
@@ -38,30 +33,35 @@ endif
 dev: check-pre-commit
 	pre-commit install
 
-run:
-	go build -o app-bin ./cmd/app && ./app-bin
+audit:
+	go mod verify
+	go vet ./...
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
-build:
-	go build -ldflags="-X main.Version=$(VERSION)" -o app-bin ./cmd/app
+coverage:
+	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1
 
-test:
-	go test -race -v ./...
-
-cover:
-	go test -race -cover -v ./...
-
-cover-html:
-	go test -race -coverprofile=coverage.out -covermode=atomic ./...
+coverage-html:
+	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=coverage.out -covermode=atomic
 	go tool cover -html=coverage.out
 
-lint: check-golangci-lint
-	golangci-lint run ./...
+format:
+	go run mvdan.cc/gofumpt@latest -w -l .
 
-tidy:
-	go mod tidy
-
-update-deps: tidy
-	go get -u ./...
+lint:
+	go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.0.2 run
 
 pre-commit: check-pre-commit
 	pre-commit run --all-files
+
+run:
+	go build -o app-bin ./cmd/app && ./app-bin
+
+test:
+	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -shuffle=on
+
+tidy:
+	go mod tidy -v
+
+update-dependencies: tidy
+	go get -u ./...
