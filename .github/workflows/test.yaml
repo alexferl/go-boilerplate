@@ -27,9 +27,6 @@ jobs:
         uses: golangci/golangci-lint-action@v7
         with:
           version: v2.0
-          install-mode: binary
-          args: --version
-          skip-cache: true
 
       - uses: actions/setup-python@v5
       - uses: pre-commit/action@v3.0.1
