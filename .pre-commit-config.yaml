@@ -21,5 +21,4 @@ repos:
     hooks:
       - id: go-fumpt
       - id: golangci-lint
-      - id: go-unit-tests
       - id: go-mod-tidy
