@@ -1,4 +1,4 @@
-.PHONY: dev audit coverage coverage-html format lint pre-commit run test tidy update-dependencies
+.PHONY: dev audit cover cover-html fmt lint pre-commit run test tidy update-deps
 
 .DEFAULT: help
 help:
@@ -6,11 +6,11 @@ help:
 	@echo "	setup development environment"
 	@echo "make audit"
 	@echo "	conduct quality checks"
-	@echo "make coverage"
+	@echo "make cover"
 	@echo "	generate coverage report"
-	@echo "make coverage-html"
+	@echo "make cover-html"
 	@echo "	generate coverage HTML report"
-	@echo "make format"
+	@echo "make fmt"
 	@echo "	fix code format issues"
 	@echo "make lint"
 	@echo "	run lint checks"
@@ -22,7 +22,7 @@ help:
 	@echo "	execute all tests"
 	@echo "make tidy"
 	@echo "	clean and tidy dependencies"
-	@echo "make update-dependencies"
+	@echo "make update-deps"
 	@echo "	update dependencies"
 
 GOTESTSUM := go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1
@@ -42,14 +42,14 @@ audit:
 	go mod verify
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
-coverage:
+cover:
 	$(GOTESTSUM) $(TESTFLAGS) $(COVERFLAGS)
 
-coverage-html:
+cover-html:
 	$(GOTESTSUM) $(TESTFLAGS) $(COVERFLAGS) -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 
-format:
+fmt:
 	$(GOLANGCI_LINT) fmt
 
 lint:
@@ -67,5 +67,5 @@ test:
 tidy:
 	go mod tidy -v
 
-update-dependencies: tidy
+update-deps: tidy
 	go get -u ./...
