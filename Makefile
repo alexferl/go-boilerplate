@@ -39,7 +39,7 @@ audit:
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
 coverage:
-	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1
+	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -covermode=atomic
 
 coverage-html:
 	go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1 -coverprofile=coverage.out -covermode=atomic
