@@ -10,7 +10,7 @@ jobs:
   test:
     strategy:
       matrix:
-        go: [stable]
+        go: [oldstable, stable]
         os: [ubuntu-latest, macos-latest]
     name: lint
     runs-on: ${{ matrix.os }}
