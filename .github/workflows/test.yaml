@@ -25,6 +25,9 @@ jobs:
         with:
           version: v2.0
 
+      - name: Clear pre-commit cache
+        run: rm -rf ~/.cache/pre-commit
+
       - uses: actions/setup-python@v5
       - uses: pre-commit/action@v3.0.1
         with:
