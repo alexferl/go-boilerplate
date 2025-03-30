@@ -25,11 +25,6 @@ help:
 
 VERSION := $(shell git describe --tags --always --dirty)
 
-check-gofumpt:
-ifeq (, $(shell which gofumpt))
-	$(error "gofumpt not in $(PATH), gofumpt (https://pkg.go.dev/mvdan.cc/gofumpt) is required")
-endif
-
 check-golangci-lint:
 ifeq (, $(shell which golangci-lint))
 	$(error "golangci-lint not in $(PATH), golangci-lint (https://golangci-lint.run) is required")
@@ -60,7 +55,6 @@ cover-html:
 	go tool cover -html=coverage.out
 
 lint: check-golangci-lint
-	gofumpt -l -w .
 	golangci-lint run ./...
 
 tidy:

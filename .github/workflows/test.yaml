@@ -20,9 +20,6 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
 
-      - name: Install gofumpt
-        run: go install mvdan.cc/gofumpt@latest
-
       - name: Install golangci-lint
         uses: golangci/golangci-lint-action@v7
         with:
@@ -34,10 +31,10 @@ jobs:
           extra_args: --all-files
 
       - name: Test with Go
-        run: go test -race -json ./... > TestResults-${{ matrix.go }}.json
+        run: go test -race -json ./... > TestResults-${{ matrix.os }}-${{ matrix.go }}.json
 
       - name: Upload Go test results
         uses: actions/upload-artifact@v4
         with:
-          name: Go-results-${{ matrix.go }}
-          path: TestResults-${{ matrix.go }}.json
+          name: Go-results-${{ matrix.os }}-${{ matrix.go }}
+          path: TestResults-${{ matrix.os }}-${{ matrix.go }}.json
