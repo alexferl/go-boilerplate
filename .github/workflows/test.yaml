@@ -37,10 +37,4 @@ jobs:
         run: pre-commit run --all-files
 
       - name: Test with Go
-        run: go test -race -json ./... > TestResults-${{ matrix.os }}-${{ matrix.go }}.json
-
-      - name: Upload Go test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: Go-results-${{ matrix.os }}-${{ matrix.go }}
-          path: TestResults-${{ matrix.os }}-${{ matrix.go }}.json
+        run: go test -race ./...
