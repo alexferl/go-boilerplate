@@ -1,4 +1,4 @@
-.PHONY: dev audit cover cover-html fmt lint pre-commit run test tidy update-deps
+.PHONY: dev audit cover cover-html fmt lint pre-commit run test tidy update-deps docker-build docker-run
 
 .DEFAULT: help
 help:
@@ -24,6 +24,10 @@ help:
 	@echo "	clean and tidy dependencies"
 	@echo "make update-deps"
 	@echo "	update dependencies"
+	@echo "make docker-build"
+	@echo "	build docker image"
+	@echo "make docker-run"
+	@echo "	run docker image"
 
 GOTESTSUM := go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1
 TESTFLAGS := -shuffle=on
@@ -69,3 +73,9 @@ tidy:
 
 update-deps: tidy
 	go get -u ./...
+
+docker-build:
+	docker build -t app .
+
+docker-run:
+	docker run --name app --rm app
