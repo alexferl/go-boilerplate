@@ -4,19 +4,25 @@ LABEL maintainer="Alexandre Ferland <me@alexferl.com>"
 WORKDIR /build
 
 RUN apk add --no-cache git
-RUN adduser -D -u 1337 appuser
+RUN adduser -D -u 1337 app
 
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build ./cmd/app
+ARG GOOS=linux
+ARG GOARCH=amd64
+
+ENV GOOS=$GOOS
+ENV GOARCH=$GOARCH
+
+RUN CGO_ENABLED=0 go build ./cmd/app
 
 FROM scratch
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /build/app /app
 
-USER appuser
+USER app
 
 ENTRYPOINT ["/app"]
