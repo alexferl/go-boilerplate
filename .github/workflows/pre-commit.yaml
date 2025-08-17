@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Python
         uses: actions/setup-python@v5
@@ -21,4 +21,4 @@ jobs:
           python-version: '3.13'
 
       - name: Install pre-commit
-        uses: pre-commit/action@v3.0.1
+        uses: pre-commit/action@v3
