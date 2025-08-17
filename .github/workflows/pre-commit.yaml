@@ -21,4 +21,4 @@ jobs:
           python-version: '3.13'
 
       - name: Install pre-commit
-        uses: pre-commit/action@v3
+        uses: pre-commit/action@v3.0.1
