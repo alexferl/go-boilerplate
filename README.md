@@ -8,7 +8,7 @@ Includes:
 - [govuln](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)
 
 ## Requirements
-- Go 1.23+
+- Go 1.24+
 - [pre-commit](https://pre-commit.com)
 
 ## Using
