@@ -4,7 +4,7 @@
 # But not these files...
 !.dockerignore
 !.editorconfig
-!.github
+!.github/**
 !/.gitignore
 !.golangci.yml
 !.pre-commit-config.yaml
