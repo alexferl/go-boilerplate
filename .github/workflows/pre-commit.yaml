@@ -15,10 +15,10 @@ jobs:
       - name: Fetch Repository
         uses: actions/checkout@v6
 
-      - name: Install Python
+      - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.14'
 
-      - name: Install pre-commit
+      - name: Setup pre-commit
         uses: pre-commit/action@v3.0.1
