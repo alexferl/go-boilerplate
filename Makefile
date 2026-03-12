@@ -1,4 +1,4 @@
-.PHONY: dev audit cover cover-html fmt lint pre-commit run test tidy update-deps docker-build docker-run
+.PHONY: dev audit cover cover-html fmt lint pre-commit run test bench tidy update-deps docker-build docker-run
 
 .DEFAULT: help
 help:
@@ -19,7 +19,9 @@ help:
 	@echo "make run"
 	@echo "	run application"
 	@echo "make test"
-	@echo "	execute all tests"
+	@echo "	run all tests"
+	@echo "make bench"
+	@echo "	run all benchmarks"
 	@echo "make tidy"
 	@echo "	clean and tidy dependencies"
 	@echo "make update-deps"
@@ -32,7 +34,7 @@ help:
 GOTESTSUM := go run gotest.tools/gotestsum@latest -f testname -- ./... -race -count=1
 TESTFLAGS := -shuffle=on
 COVERFLAGS := -covermode=atomic
-GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.7.2
+GOLANGCI_LINT := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.3
 
 check-pre-commit:
 ifeq (, $(shell which pre-commit))
@@ -67,6 +69,9 @@ run:
 
 test:
 	$(GOTESTSUM) $(TESTFLAGS)
+
+bench:
+	go test -bench=. -benchmem -run=^$$ ./...
 
 tidy:
 	go mod tidy -v
