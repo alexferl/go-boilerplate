@@ -19,7 +19,7 @@ ARG GOARCH=amd64
 ENV GOOS=$GOOS
 ENV GOARCH=$GOARCH
 
-RUN CGO_ENABLED=0 go build -o /build/app ./cmd/app
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /build/app ./cmd/app
 
 FROM scratch
 
